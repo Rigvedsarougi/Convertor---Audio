@@ -1,18 +1,15 @@
+# converter.py
+
 import os
-import tempfile
+from io import BytesIO
 from pydub import AudioSegment
 
-def convert_audio(input_file, output_format):
-    input_format = input_file.split('.')[-1].lower()
+def convert_audio(uploaded_file, output_format):
+    input_format = uploaded_file.name.split('.')[-1].lower()
     output_file = f"converted.{output_format}"
     
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        temp_file.write(input_file.read())
-        temp_file_path = temp_file.name
-    
-    audio = AudioSegment.from_file(temp_file_path, format=input_format)
-    audio.export(output_file, format=output_format)
-    
-    os.unlink(temp_file_path)  # Delete the temporary file
+    with BytesIO(uploaded_file.read()) as audio_bytes:
+        audio = AudioSegment.from_file(audio_bytes, format=input_format)
+        audio.export(output_file, format=output_format)
     
     return output_file
