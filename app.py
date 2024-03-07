@@ -54,8 +54,9 @@ def convert_audio(audio_file, output_format):
     
     audio_data = AudioSegment.from_mp3(audio_file)
     output_audio_file = audio_file.split('.')[0] + f'.{output_format}'
-    audio_data.export(os.path.join(download_path, output_audio_file), format=output_format)
-    return output_audio_file
+    output_file_path = os.path.join(download_path, output_audio_file)
+    audio_data.export(output_file_path, format=output_format)
+    return output_file_path
 
 st.title("MP3 Converter")
 st.info("This app converts MP3 audio files to other formats.")
